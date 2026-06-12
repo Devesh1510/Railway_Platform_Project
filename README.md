@@ -166,7 +166,7 @@ This required custom time-window handling logic rather than simple date-based fi
 | ---------------------- | ------------------------------ |
 | Authentication         | Secure controller login        |
 | Scheduler              | Cost-function based allocation |
-| Conflict Resolver      | Automatic train re-routing     |
+| Conflict Resolver      | Automatic platform reallocation|
 | Delay Predictor        | Random Forest regression       |
 | Platform Advisor       | Random Forest classification   |
 | Audit Logger           | Tracks manual interventions    |
