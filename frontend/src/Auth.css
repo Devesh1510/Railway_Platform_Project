@@ -1,0 +1,148 @@
+/* ── Auth background ── */
+.auth-bg {
+  min-height: 100vh;
+  background-color: #1a1a1d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ── Card ── */
+.auth-card {
+  background: #2c2c2e;
+  border: 1px solid #3a3a3e;
+  border-radius: 14px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.auth-logo {
+  font-size: 2.4rem;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.auth-title {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 4px;
+}
+
+.auth-subtitle {
+  color: #888;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0 0 28px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ── Form ── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-label {
+  color: #aaa;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.auth-input {
+  background: #3a3a3e;
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input:focus {
+  border-color: #4caf50;
+}
+
+/* ── Password criteria list ── */
+.pw-criteria {
+  list-style: none;
+  padding: 8px 12px;
+  margin: 4px 0 0;
+  background: #1a1a1d;
+  border-radius: 6px;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pw-criteria li {
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.pw-ok   { color: #4caf50; }
+.pw-fail { color: #888; }
+
+/* ── Error ── */
+.auth-error {
+  color: #ff6b6b;
+  font-size: 0.82rem;
+  margin: 6px 0 0;
+  padding: 8px 12px;
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  border-radius: 6px;
+}
+
+/* ── Submit button ── */
+.auth-btn {
+  margin-top: 20px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 11px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.auth-btn:hover {
+  background: #43a047;
+}
+
+/* ── Switch link ── */
+.auth-switch {
+  color: #888;
+  font-size: 0.82rem;
+  text-align: center;
+  margin: 20px 0 0;
+}
+
+.auth-link {
+  background: none;
+  border: none;
+  color: #4caf50;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.auth-link:hover {
+  color: #66bb6a;
+}

@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+backend/station.db
+backend/__pycache__/
+
+# Node
+frontend/node_modules/
+frontend/build/
+
+# Env
+.env
+*.env
+
+# Kiro
+.kiro/
