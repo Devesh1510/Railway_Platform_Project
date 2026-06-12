@@ -28,38 +28,7 @@ function Root() {
 
   return (
     <div>
-      <div style={{
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-        background: '#2c2c2e',
-        padding: '6px 14px',
-        borderRadius: '6px',
-        fontSize: '0.8rem',
-        color: '#aaa',
-        display: 'flex',
-        gap: '10px',
-        alignItems: 'center',
-        zIndex: 1000,
-      }}>
-        <span>👤 {loggedInUser}</span>
-        <button
-          onClick={handleLogout}
-          style={{
-            background: '#ff4d4d',
-            color: 'white',
-            border: 'none',
-            padding: '4px 10px',
-            borderRadius: '4px',
-            fontSize: '0.75rem',
-            cursor: 'pointer',
-            fontWeight: 600,
-          }}
-        >
-          Logout
-        </button>
-      </div>
-      <App />
+      <App loggedInUser={loggedInUser} onLogout={handleLogout} />
     </div>
   );
 }

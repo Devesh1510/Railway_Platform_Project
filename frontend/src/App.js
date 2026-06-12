@@ -125,27 +125,46 @@ function PuneJnTab({ schedule, loading, error, newTrain, setNewTrain, handleAddT
         <p className="error-message">{error}</p>
       ) : (
         <>
-          {/* PLATFORM GRID */}
-          <div className="platform-grid">
-            {[1, 2, 3, 4, 5, 6].map(pid => {
-              const { status, trainName, trainNo, arrival, departure, isOriginating } = getPlatformStatus(pid);
-              return (
-                <div key={pid} className={`platform-card ${status}`}>
-                  <h3>P{pid}</h3>
-                  <h1>{trainNo || '--'}</h1>
-                  <p>{trainName}</p>
-                  <p className="platform-times">
-                    {departure
-                      ? isOriginating
-                        ? `Dep: ${departure}`
-                        : arrival
-                          ? `Arr: ${arrival} · Dep: ${departure}`
-                          : `Dep: ${departure}`
-                      : '--'}
-                  </p>
-                </div>
-              );
-            })}
+          {/* PLATFORM SCHEMATIC DIAGRAM */}
+          <div className="platform-schematic">
+
+            {/* Left zone labels */}
+            <div className="schematic-labels-left">
+              <span className="zone-label-side miraj-label">◀ Miraj</span>
+              <span className="zone-label-side solapur-label">◀ Solapur</span>
+            </div>
+
+            {/* Platform tracks */}
+            <div className="schematic-tracks">
+              {[1, 2, 3, 4, 5, 6].map(pid => {
+                const { status, trainName, trainNo, arrival, departure, isOriginating } = getPlatformStatus(pid);
+                return (
+                  <React.Fragment key={pid}>
+                    {pid === 4 && <div className="zone-divider" />}
+                    <div className={`platform-card ${status}`}>
+                      <h3>P{pid}</h3>
+                      <h1>{trainNo || '--'}</h1>
+                      <p>{trainName}</p>
+                      <p className="platform-times">
+                        {departure
+                          ? isOriginating
+                            ? `Dep: ${departure}`
+                            : arrival
+                              ? `Arr: ${arrival} · Dep: ${departure}`
+                              : `Dep: ${departure}`
+                          : '--'}
+                      </p>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+
+            {/* Right label — Mumbai common for all */}
+            <div className="schematic-labels-right">
+              <span className="zone-label-side mumbai-label">Mumbai ▶</span>
+            </div>
+
           </div>
 
           {/* SCHEDULE TABLE */}
@@ -325,7 +344,7 @@ function NearbyStationsTab({ nearbyData, nearbyLoading }) {
 
 // --- ROOT APP ---
 
-function App() {
+function App({ loggedInUser, onLogout }) {
   const [activeTab, setActiveTab] = useState('pune');
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -394,9 +413,28 @@ function App() {
 
   return (
     <div className="App">
-      <div className="header">
-        <h1>🚆 Pune Division Controller</h1>
-        <LiveClock />
+      {/* ── HUD HEADER BAR ── */}
+      <div className="hud-header">
+        <div className="hud-left">
+          <span className="hud-logo">🚂</span>
+          <div className="hud-logo-text">
+            <span className="hud-org">Indian Railways</span>
+            <span className="hud-zone">Central Railway · Pune Division</span>
+          </div>
+        </div>
+        <div className="hud-center">
+          <span className="hud-station-name">🏛️ Pune Junction</span>
+          <span className="hud-station-sub">Station Control Dashboard</span>
+        </div>
+        <div className="hud-right">
+          <LiveClock />
+          {loggedInUser && (
+            <div className="hud-user">
+              <span className="hud-user-name">👤 {loggedInUser}</span>
+              <button className="hud-logout" onClick={onLogout}>Logout</button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* MAIN TAB BAR */}
