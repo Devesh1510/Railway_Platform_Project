@@ -214,7 +214,7 @@ MASTER_TIMETABLE = [
     {"number": "12158", "name": "SOLAPUR - PUNE HUTATMA EXPRESS", "time": "10:30", "type": "Terminating", "route": "Solapur"},
     {"number": "20821", "name": "PUNE - SANTRAGACHI HUMSAFAR", "time": "10:40", "type": "Originating", "route": "Mumbai"},
     {"number": "11007", "name": "CSMT - PUNE DECCAN EXPRESS", "time": "11:05", "type": "Terminating", "route": "Mumbai"},
-    {"number": "22152", "name": "KAZIPET - PUNE SF EXP", "time": "11:05", "type": "Terminating", "route": "Solapur"},
+    {"number": "22152", "name": "KAZIPET - PUNE SF EXP", "time": "10:50", "type": "Terminating", "route": "Solapur"},
     {"number": "11025", "name": "PUNE - AMRAVATI EXPRESS", "time": "11:05", "type": "Originating", "route": "Solapur"},
     {"number": "12263", "name": "PUNE - H.NIZAMUDDIN DURONTO EXPRESS", "time": "11:10", "type": "Originating", "route": "Mumbai"},
     {"number": "12103", "name": "PUNE - LUCKNOW SF EXPRESS", "time": "11:15", "type": "Originating", "route": "Solapur"},
@@ -233,27 +233,30 @@ MASTER_TIMETABLE = [
     {"number": "20669", "name": "HUBBALLI - PUNE VANDE BHARAT", "time": "13:30", "type": "Terminating", "route": "Miraj"},
     {"number": "20674", "name": "PUNE - KOLHAPUR VANDE BHARAT", "time": "14:10", "type": "Originating", "route": "Miraj"},
     {"number": "16340", "name": "NAGERCOIL - LTT EXPRESS", "time": "15:05", "type": "Through", "route": "Solapur"},
-    {"number": "22123", "name": "PUNE - AJNI AC EXPRESS", "time": "16:55", "type": "Originating", "route": "Solapur"},
+    {"number": "22123", "name": "PUNE - AJNI AC EXPRESS", "time": "15:15", "type": "Originating", "route": "Solapur"},
     {"number": "12221", "name": "PUNE - HOWRAH DURONTO", "time": "15:15", "type": "Originating", "route": "Solapur"},
     {"number": "11008", "name": "PUNE - MUMBAI DECCAN EXPRESS", "time": "15:15", "type": "Originating", "route": "Mumbai"},
     {"number": "22943", "name": "DAUND - INDORE SF EXPRESS", "time": "15:25", "type": "Through", "route": "Mumbai"},
     {"number": "11030", "name": "MUMBAI KOYNA EXPRESS", "time": "15:45", "type": "Through", "route": "Mumbai"},
     {"number": "11302", "name": "BENGALURU - CSMT UDYAN EXPRESS", "time": "15:55", "type": "Through", "route": "Solapur"},
     {"number": "22159", "name": "CSMT - CHENNAI SF EXPRESS", "time": "16:20", "type": "Through", "route": "Solapur"},
+    {"number": "22101", "name": "LTT - MADURAI EXPRESS", "time": "16:35", "type": "Through", "route": "Solapur"},
     {"number": "19667", "name": "UDAIPUR - MYSORE PALACE QUEEN HUMSAFAR EXPRESS", "time": "16:40", "type": "Through", "route": "Miraj"},
 
     # --- EVENING ---
     {"number": "12780", "name": "GOA EXPRESS", "time": "17:10", "type": "Through", "route": "Miraj"},
     {"number": "11077", "name": "PUNE - JAMMUTAWI JHELUM EXP", "time": "17:20", "type": "Originating", "route": "Solapur"},
     {"number": "12135", "name": "PUNE - NAGPUR SF EXPRESS", "time": "17:35", "type": "Originating", "route": "Solapur"},
+    {"number": "12113", "name": "PUNE - NAGPUR GARIBRATH", "time": "17:35", "type": "Originating", "route": "Solapur"},
     {"number": "12157", "name": "SOLAPUR HUTATMA EXPRESS", "time": "17:50", "type": "Originating", "route": "Solapur"},
     {"number": "12128", "name": "PUNE - CSMT INTERCITY EXP", "time": "17:55", "type": "Originating", "route": "Mumbai"},
     {"number": "11019", "name": "BHUBANESHWAR KONARK EXP", "time": "17:55", "type": "Through", "route": "Solapur"},
     {"number": "22732", "name": "CSMT - HYDERABAD SF", "time": "18:05", "type": "Through", "route": "Solapur"},
     {"number": "12170", "name": "SOLAPUR - PUNE INTERCITY", "time": "18:05", "type": "Terminating", "route": "Solapur"},
     {"number": "12129", "name": "PUNE - HOWRAH AZAD HIND EXP", "time": "18:30", "type": "Originating", "route": "Solapur"},
-    {"number": "22106", "name": "MUMBAI INDRAYANI EXPRESS", "time": "18:35", "type": "Originating", "route": "Mumbai"},
+    {"number": "22106", "name": "PUNE - CSMT INDRAYANI EXPRESS", "time": "18:35", "type": "Originating", "route": "Mumbai"},
     {"number": "22225", "name": "CSMT - SOLAPUR VANDE BHARAT", "time": "19:05", "type": "Through", "route": "Solapur"},
+    {"number": "17613", "name": "PANVEL - NANDED EXPRESS", "time": "19:15", "type": "Through", "route": "Solapur"},
     {"number": "12125", "name": "CSMT - PUNE PRAGATI EXPRESS", "time": "19:50", "type": "Terminating", "route": "Mumbai"},
     {"number": "12123", "name": "CSMT - PUNE DECCAN QUEEN", "time": "20:25", "type": "Terminating", "route": "Mumbai"},
 
@@ -263,10 +266,13 @@ MASTER_TIMETABLE = [
     {"number": "22717", "name": "RAJKOT - SECUNDERABAD EXP", "time": "21:20", "type": "Through", "route": "Solapur"},
     {"number": "26102", "name": "AJNI - PUNE VANDE BHARAT", "time": "21:50", "type": "Terminating", "route": "Solapur"},
     {"number": "11009", "name": "CSMT - PUNE SINHGAD EXPRESS", "time": "21:55", "type": "Terminating", "route": "Mumbai"},
+    {"number": "22117", "name": "PUNE - AMRAVATI AC EXP", "time": "22:00", "type": "Originating", "route": "Solapur"},
     {"number": "22141", "name": "PUNE - NAGPUR HUMSAFAR EXP", "time": "22:00", "type": "Originating", "route": "Solapur"},
+    {"number": "22139", "name": "PUNE - AJNI HUMSAFAR EXP", "time": "22:00", "type": "Originating", "route": "Solapur"},
     {"number": "12163", "name": "LTT - CHENNAI SF EXP", "time": "22:10", "type": "Through", "route": "Solapur"},
     {"number": "16507", "name": "JODHPUR - BENGALURU EXPRESS", "time": "22:25", "type": "Through", "route": "Miraj"},
-    {"number": "12026", "name": "HYDERABAD - PUNE SHATABDI", "time": "23:10", "type": "Terminating", "route": "Solapur"}
+    {"number": "12026", "name": "HYDERABAD - PUNE SHATABDI", "time": "23:10", "type": "Terminating", "route": "Solapur"},
+    {"number": "11424", "name": "SAINAGAR SHIRDI - PUNE EXP", "time": "23:50", "type": "Terminating", "route": "Solapur"}
 ]
 
 # 2. THE ACTIVE BOARD (Trains currently at the station)
