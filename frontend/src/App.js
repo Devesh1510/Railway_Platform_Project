@@ -41,7 +41,7 @@ function PuneJnTab({ schedule, loading, error, newTrain, setNewTrain, handleAddT
   useEffect(() => {
     schedule.forEach(row => {
       if (liveStatus[row.train_no] !== undefined) return; // already fetched
-      fetch(`https://pune-station-backend.onrender.com//api/live-status/${row.train_no}`)
+      fetch(`https://railway-platform-project.onrender.com/api/live-status/${row.train_no}`)
         .then(r => r.json())
         .then(data => setLiveStatus(prev => ({ ...prev, [row.train_no]: data })))
         .catch(() => setLiveStatus(prev => ({ ...prev, [row.train_no]: null })));
@@ -357,7 +357,7 @@ function App({ loggedInUser, onLogout }) {
   });
 
   const fetchSchedule = () => {
-    fetch('https://pune-station-backend.onrender.com//api/schedule')
+    fetch('https://railway-platform-project.onrender.com/api/schedule')
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(data => {
         // Sort chronologically with midnight wrap
@@ -378,7 +378,7 @@ function App({ loggedInUser, onLogout }) {
   };
 
   const fetchNearby = () => {
-    fetch('https://pune-station-backend.onrender.com//api/nearby-stations')
+    fetch('https://railway-platform-project.onrender.com/api/nearby-stations')
       .then(r => r.json())
       .then(data => { setNearbyData(data); setNearbyLoading(false); })
       .catch(() => setNearbyLoading(false));
@@ -394,7 +394,7 @@ function App({ loggedInUser, onLogout }) {
 
   const handleAddTrain = () => {
     if (!newTrain.number || !newTrain.name || !newTrain.time) return alert('Fill all fields');
-    fetch('https://pune-station-backend.onrender.com//api/add-train', {
+    fetch('https://railway-platform-project.onrender.com/api/add-train', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newTrain),
@@ -406,7 +406,7 @@ function App({ loggedInUser, onLogout }) {
 
   const handleDelete = (trainNo) => {
     setSchedule(prev => prev.filter(t => t.train_no !== trainNo));
-    fetch(`https://pune-station-backend.onrender.com//api/delete-train/${trainNo}`, { method: 'DELETE' })
+    fetch(`https://railway-platform-project.onrender.com/api/delete-train/${trainNo}`, { method: 'DELETE' })
       .then(() => { fetchSchedule(); fetchNearby(); })
       .catch(() => { fetchSchedule(); fetchNearby(); });
   };
