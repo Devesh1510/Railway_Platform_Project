@@ -1,2 +1,6 @@
 flask
 flask-cors
+scikit-learn
+numpy
+railsutra
+gunicorn

@@ -41,7 +41,7 @@ function PuneJnTab({ schedule, loading, error, newTrain, setNewTrain, handleAddT
   useEffect(() => {
     schedule.forEach(row => {
       if (liveStatus[row.train_no] !== undefined) return; // already fetched
-      fetch(`http://127.0.0.1:5000/api/live-status/${row.train_no}`)
+      fetch(`https://pune-station-backend.onrender.com//api/live-status/${row.train_no}`)
         .then(r => r.json())
         .then(data => setLiveStatus(prev => ({ ...prev, [row.train_no]: data })))
         .catch(() => setLiveStatus(prev => ({ ...prev, [row.train_no]: null })));
@@ -357,7 +357,7 @@ function App({ loggedInUser, onLogout }) {
   });
 
   const fetchSchedule = () => {
-    fetch('http://127.0.0.1:5000/api/schedule')
+    fetch('https://pune-station-backend.onrender.com//api/schedule')
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(data => {
         // Sort chronologically with midnight wrap
@@ -378,7 +378,7 @@ function App({ loggedInUser, onLogout }) {
   };
 
   const fetchNearby = () => {
-    fetch('http://127.0.0.1:5000/api/nearby-stations')
+    fetch('https://pune-station-backend.onrender.com//api/nearby-stations')
       .then(r => r.json())
       .then(data => { setNearbyData(data); setNearbyLoading(false); })
       .catch(() => setNearbyLoading(false));
@@ -394,7 +394,7 @@ function App({ loggedInUser, onLogout }) {
 
   const handleAddTrain = () => {
     if (!newTrain.number || !newTrain.name || !newTrain.time) return alert('Fill all fields');
-    fetch('http://127.0.0.1:5000/api/add-train', {
+    fetch('https://pune-station-backend.onrender.com//api/add-train', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newTrain),
@@ -406,7 +406,7 @@ function App({ loggedInUser, onLogout }) {
 
   const handleDelete = (trainNo) => {
     setSchedule(prev => prev.filter(t => t.train_no !== trainNo));
-    fetch(`http://127.0.0.1:5000/api/delete-train/${trainNo}`, { method: 'DELETE' })
+    fetch(`https://pune-station-backend.onrender.com//api/delete-train/${trainNo}`, { method: 'DELETE' })
       .then(() => { fetchSchedule(); fetchNearby(); })
       .catch(() => { fetchSchedule(); fetchNearby(); });
   };
