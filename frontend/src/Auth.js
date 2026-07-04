@@ -36,11 +36,9 @@ function CreateAccount({ onSwitch, onSuccess }) {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm]   = useState('');
   const [error, setError]       = useState('');
-  const [pwErrors, setPwErrors] = useState([]);
 
   const handlePasswordChange = (val) => {
     setPassword(val);
-    setPwErrors(validatePassword(val));
   };
 
   const handleSubmit = (e) => {
