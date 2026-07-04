@@ -1,9 +1,14 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import time
 from ml_models import predict_delay, predict_platform
 from database import init_db, update_train_record, get_all_trains
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def now_ist():
+    return datetime.now(IST)
 
 app = Flask(__name__)
 CORS(app)
@@ -55,7 +60,7 @@ def run_allocation(train_data):
     reset_platforms()
     schedule_results = []
 
-    now_mins = datetime.now().hour * 60 + datetime.now().minute
+    now_mins = now_ist().hour * 60 + now_ist().minute
 
     def _sort_key(x):
         s = x.start_needed
@@ -319,7 +324,7 @@ init_db(MASTER_TIMETABLE)
 # --- AUTO UPDATE LOGIC ---
 def process_automated_schedule():
     global train_db
-    now = datetime.now()
+    now = now_ist()
     current_mins = now.hour * 60 + now.minute
     current_time_sec = time.time()
 
@@ -443,7 +448,7 @@ def delete_train(train_no):
 
 @app.route('/api/nearby-stations', methods=['GET'])
 def get_nearby_stations():
-    now = datetime.now()
+    now = now_ist()
     current_mins = now.hour * 60 + now.minute
     current_time_sec = time.time()
 
@@ -545,7 +550,7 @@ def get_live_status(train_no):
         master_entry = next((t for t in MASTER_TIMETABLE if t['number'] == train_no), None)
         journey_days = master_entry.get('journey_days', 0) if master_entry else 0
 
-        query_date = (dt.now() - timedelta(days=journey_days)).strftime('%d-%m-%Y')
+        query_date = (now_ist() - timedelta(days=journey_days)).strftime('%d-%m-%Y')
         result = get_live_train_status(train_no, query_date)
 
         if not result or result[0] is None:

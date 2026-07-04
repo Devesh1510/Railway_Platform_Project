@@ -20,7 +20,9 @@ Table: trains
 
 import sqlite3
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+IST = timezone(timedelta(hours=5, minutes=30))
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'station.db')
 
@@ -80,7 +82,7 @@ def update_train_record(train_no, name, train_type, route, scheduled_arrival,
     Called from run_allocation for every train in the active schedule.
     """
     zone = PLATFORM_ZONE.get(platform_assigned)
-    now  = datetime.now().isoformat(timespec='seconds')
+    now  = datetime.now(IST).isoformat(timespec='seconds')
 
     conn = get_connection()
     conn.execute('''
