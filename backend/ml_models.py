@@ -162,9 +162,8 @@ def predict_platform(hour: int, minute: int, train_type: str, route: str,
 
 
 # ── Visualization Section ────────────────────────────────────────────────────
-import matplotlib.pyplot as plt
-
 def plot_graphs():
+    import matplotlib.pyplot as plt
     print("[ML] Generating graphs...")
 
     # --- 1. Delay Distribution ---
