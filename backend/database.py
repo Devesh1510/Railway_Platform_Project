@@ -117,3 +117,71 @@ def get_all_trains():
     ).fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
+
+# ── AUTH FUNCTIONS ────────────────────────────────────────────────────────────
+import hashlib
+import secrets
+
+
+def _hash_password(password: str, salt: str) -> str:
+    return hashlib.sha256((salt + password).encode()).hexdigest()
+
+
+def _ensure_users_table(cur):
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id   TEXT PRIMARY KEY,
+            role      TEXT NOT NULL,
+            salt      TEXT NOT NULL,
+            password  TEXT NOT NULL
+        )
+    ''')
+
+
+def create_user(user_id: str, password: str, role: str) -> dict:
+    """
+    Create a new user account. Raises ValueError if user_id already exists.
+    Returns { user_id, role }.
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+    _ensure_users_table(cur)
+
+    existing = cur.execute(
+        'SELECT user_id FROM users WHERE user_id = ?', (user_id,)
+    ).fetchone()
+    if existing:
+        conn.close()
+        raise ValueError(f"User '{user_id}' already exists.")
+
+    salt = secrets.token_hex(16)
+    hashed = _hash_password(password, salt)
+    cur.execute(
+        'INSERT INTO users (user_id, role, salt, password) VALUES (?, ?, ?, ?)',
+        (user_id, role, salt, hashed)
+    )
+    conn.commit()
+    conn.close()
+    return {'user_id': user_id, 'role': role}
+
+
+def verify_user(user_id: str, password: str):
+    """
+    Verify credentials. Returns { user_id, role } on success, None on failure.
+    """
+    conn = get_connection()
+    cur = conn.cursor()
+    _ensure_users_table(cur)
+
+    row = cur.execute(
+        'SELECT role, salt, password FROM users WHERE user_id = ?', (user_id,)
+    ).fetchone()
+    conn.close()
+
+    if not row:
+        return None
+    hashed = _hash_password(password, row['salt'])
+    if hashed != row['password']:
+        return None
+    return {'user_id': user_id, 'role': row['role']}
