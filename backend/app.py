@@ -3,7 +3,7 @@ from flask_cors import CORS
 from datetime import datetime, timezone, timedelta
 import time
 from ml_models import predict_delay, predict_platform
-from database import init_db, update_train_record, get_all_trains
+from database import init_db, update_train_record, get_all_trains, verify_user, create_user
 
 IST = timezone(timedelta(hours=5, minutes=30))
 
@@ -294,13 +294,16 @@ MASTER_TIMETABLE = [
 
     # --- NIGHT ---
     {"number": "11401", "name": "PUNE - SUPAUL EXP", "time": "21:00", "type": "Originating", "route": "Solapur", "journey_days": 0},
+    {"number": "19568", "name": "OKHA - TUTICORIN VIVEK EXP", "time": "21:10", "type": "Through", "route": "Solapur", "journey_days": 0},
     {"number": "16613", "name": "RAJKOT - COIMBATORE EXP", "time": "21:10", "type": "Through", "route": "Solapur", "journey_days": 1},
     {"number": "22717", "name": "RAJKOT - SECUNDERABAD EXP", "time": "21:20", "type": "Through", "route": "Solapur", "journey_days": 1},
+    {"number": "16382", "name": "CAPE - PUNE EXP", "time": "21:40", "type": "Terminating", "route": "Solapur", "journey_days": 1},
     {"number": "26102", "name": "AJNI - PUNE VANDE BHARAT", "time": "21:50", "type": "Terminating", "route": "Solapur", "journey_days": 0},
     {"number": "11009", "name": "CSMT - PUNE SINHGAD EXPRESS", "time": "21:55", "type": "Terminating", "route": "Mumbai", "journey_days": 0},
     {"number": "22117", "name": "PUNE - AMRAVATI AC EXP", "time": "22:00", "type": "Originating", "route": "Solapur", "journey_days": 0},
     {"number": "22141", "name": "PUNE - NAGPUR HUMSAFAR EXP", "time": "22:00", "type": "Originating", "route": "Solapur", "journey_days": 0},
     {"number": "22139", "name": "PUNE - AJNI HUMSAFAR EXP", "time": "22:00", "type": "Originating", "route": "Solapur", "journey_days": 0},
+    {"number": "11039", "name": "KOLHAPUR - GONDIA MAHARASHTRA EXP", "time": "22:20", "type": "Through", "route": "Solapur", "journey_days": 0},
     {"number": "12163", "name": "LTT - CHENNAI SF EXP", "time": "22:10", "type": "Through", "route": "Solapur", "journey_days": 0},
     {"number": "16507", "name": "JODHPUR - BENGALURU EXPRESS", "time": "22:25", "type": "Through", "route": "Miraj", "journey_days": 1},
     {"number": "12026", "name": "HYDERABAD - PUNE SHATABDI", "time": "23:10", "type": "Terminating", "route": "Solapur", "journey_days": 0},
@@ -404,6 +407,11 @@ def process_automated_schedule():
                 if alive_mins < duration or current_mins < end_mins:
                     active_trains_to_keep.append(original_train)
                     final_schedule_to_show.append(s)
+                else:
+                    # Auto-expired manually-added train — record departure for ARRIVING NOW
+                    train_no = original_train['number']
+                    if train_no not in departed_trains:
+                        departed_trains[train_no] = current_time_sec
                 continue
 
             if current_mins < end_mins:
@@ -413,6 +421,11 @@ def process_automated_schedule():
                 # Midnight wrap: end_mins crossed midnight, current_mins is early morning
                 active_trains_to_keep.append(original_train)
                 final_schedule_to_show.append(s)
+            else:
+                # Auto-expired train — record departure timestamp for ARRIVING NOW
+                train_no = original_train['number']
+                if train_no not in departed_trains:
+                    departed_trains[train_no] = current_time_sec
 
     train_db = active_trains_to_keep
     return final_schedule_to_show
@@ -460,7 +473,7 @@ def get_nearby_stations():
     }
 
     result = {}
-    ARRIVING_NOW_WINDOW = 8  # seconds after delete to show "ARRIVING NOW"
+    ARRIVING_NOW_WINDOW = 30  # seconds after delete to show "ARRIVING NOW"
 
     # Build lookup of manually added trains by number (these override master data)
     manual_by_number = {t['number']: t for t in train_db if t.get('manually_added')}
@@ -568,6 +581,56 @@ def get_live_status(train_no):
         })
     except Exception as e:
         return jsonify({'last_station': None, 'delay': None, 'dep_time': None, 'error': str(e)})
+
+
+# ── AUTH ENDPOINTS ────────────────────────────────────────────────────────────
+
+@app.route('/api/auth/login', methods=['POST'])
+def auth_login():
+    """
+    Verify credentials against the users table.
+    Body: { "user_id": "...", "password": "..." }
+    Returns: { "user_id": "...", "role": "controller"|"data_logger" }
+    or 401 on bad credentials.
+    """
+    data = request.get_json(silent=True) or {}
+    user_id  = (data.get('user_id')  or '').strip()
+    password = (data.get('password') or '').strip()
+
+    if not user_id or not password:
+        return jsonify({'error': 'user_id and password are required.'}), 400
+
+    user = verify_user(user_id, password)
+    if not user:
+        return jsonify({'error': 'Invalid User ID or password.'}), 401
+
+    return jsonify({'user_id': user['user_id'], 'role': user['role']})
+
+
+@app.route('/api/auth/register', methods=['POST'])
+def auth_register():
+    """
+    Create a new user account.
+    Body: { "user_id": "...", "password": "...", "role": "controller"|"data_logger" }
+    Returns: { "user_id": "...", "role": "..." }  or 400/409 on error.
+    """
+    data = request.get_json(silent=True) or {}
+    user_id  = (data.get('user_id')  or '').strip()
+    password = (data.get('password') or '').strip()
+    role     = (data.get('role')     or '').strip()
+
+    if not user_id or not password or not role:
+        return jsonify({'error': 'user_id, password, and role are required.'}), 400
+
+    if role not in ('controller', 'data_logger'):
+        return jsonify({'error': "role must be 'controller' or 'data_logger'."}), 400
+
+    try:
+        user = create_user(user_id, password, role)
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 409
+
+    return jsonify({'user_id': user['user_id'], 'role': user['role']}), 201
 
 
 if __name__ == '__main__':
