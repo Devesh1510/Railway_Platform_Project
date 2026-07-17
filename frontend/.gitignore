@@ -10,9 +10,12 @@ backend/__pycache__/
 frontend/node_modules/
 frontend/build/
 
-# Env
+# Env — ignore local overrides, but commit production env for Vercel
 .env
-*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Kiro
 .kiro/
