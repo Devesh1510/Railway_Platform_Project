@@ -355,6 +355,8 @@ def process_automated_schedule():
     for t in MASTER_TIMETABLE:
         th, tm = map(int, t['time'].split(':'))
         t_mins = th * 60 + tm
+        train_type = t.get('type', 'Through')
+        duration = 45 if train_type in ['Origin', 'Originating'] else 30 if train_type == 'Terminating' else 15
 
         # Adjust for midnight wrap: if train time is earlier in the day,
         # it's actually tomorrow — add 1440 to get correct forward difference
@@ -362,7 +364,9 @@ def process_automated_schedule():
         if time_diff < -60:          # clearly in the past by more than 1 hr → next day
             time_diff += 1440
 
-        if 0 <= time_diff <= 180:
+        # Include trains that arrived up to <duration> mins ago (still on platform)
+        # and trains arriving up to 3 hours from now
+        if -duration <= time_diff <= 180:
             if not any(active['number'] == t['number'] for active in train_db):
                 if t['number'] not in deleted_numbers:
                     new_train = t.copy()
